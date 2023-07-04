@@ -23,11 +23,11 @@ public class UserInfoServiceImpI implements UserInfoService {
     }
     //    通过邮箱查询用户
     @Override
-    public User getInfoByEmail(String email){
-        return userInfoMapper.getInfoByEmail(email);
-    }
+    public User getInfoByEmail(String email){ return userInfoMapper.getInfoByEmail(email); }
     @Override
     public List<Chat> getChats(int id){ return userInfoMapper.getChats(id);}
+    @Override
+    public int setChats(Chat chat){ return userInfoMapper.setChats(chat); };
     //    添加好友
     @Override
     public int addFriend(Relate newFriend){return  userInfoMapper.addFriend(newFriend);};

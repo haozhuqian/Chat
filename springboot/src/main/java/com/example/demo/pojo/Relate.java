@@ -9,6 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Relate {
-    private String sendId;
-    private  String receiveId;
+    private int sendId;
+    private int receiveId;
+    public void exchangeId(){
+        int cup=this.sendId;
+        this.sendId=this.receiveId;
+        this.receiveId=cup;
+    }
+
 }

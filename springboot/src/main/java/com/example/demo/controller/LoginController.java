@@ -18,14 +18,11 @@ public class LoginController {
     @PostMapping("/toLogin")
     //登录
     public UserLoginException toLogin(@RequestBody User userLogin ){
-        System.out.println("toLogin");
         UserLoginException res = new UserLoginException();
         if(!loginS.isLoginByEmail(userLogin.getEmail())){
-            System.out.println("queryAllByEmail");
             List<User> loginUser = loginS.queryAllByEmail(userLogin.getEmail());
             if(loginUser != null && !loginUser.isEmpty()){
                 User user = loginUser.get(0);
-                System.out.println("equals");
                 if(user.getPassword().equals(userLogin.getPassword())){
                     loginS.login(user);
                     return res.setSuccess(user);

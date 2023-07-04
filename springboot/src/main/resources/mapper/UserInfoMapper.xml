@@ -7,14 +7,17 @@
         update user_db set name=#{name},gender=#{gender},region=#{region},avatar=#{avatar} where id=#{id};
     </update>
     <select id="getInfoById" resultType="com.example.demo.pojo.User">
-        select * from user_db where userId=#{id};
+        select * from user_db where id=#{id};
     </select>
     <select id="getInfoByEmail" resultType="com.example.demo.pojo.User">
         select * from user_db where email=#{email};
     </select>
     <select id="getChats" resultType="com.example.demo.pojo.Chat">
-    select * from chat_db where chat_db.sendId=#{id});
+    select * from chat_db where chat_db.sendId=#{id};
     </select>
+    <insert id="setChats" parameterType="com.example.demo.pojo.Chat">
+        insert into chat_db (sendId,receiveId,word,time) values(#{sendId},#{receiveId},#{word},#{time});
+    </insert>
     <insert id="addFriend" parameterType="com.example.demo.pojo.Relate">
         insert into relate_db (sendId,receiveId) values(#{sendId},#{receiveId});
     </insert>
@@ -22,7 +25,7 @@
         select EXISTS (SELECT * FROM relate_db WHERE sendId=#{sendId} and receiveId=#{receiveId}) ;
     </select>
     <select id="getAllFriends" resultType="com.example.demo.pojo.Relate">
-        select * from relate_db where relate_db.sendId=#{id});
+        select * from relate_db where relate_db.sendId=#{id};
     </select>
 
 </mapper>

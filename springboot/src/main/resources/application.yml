@@ -11,4 +11,4 @@ spring:
       max-request-size: 100MB
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
-file-save-path: ..\static\image
+file-save-path: .\static\image

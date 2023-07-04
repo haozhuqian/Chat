@@ -27,11 +27,6 @@
 
 <script>
 export default {
-  mounted() {
-    this.$api.loginApi.toLogin().then(function (res) {
-      console.log(res)
-    })
-  },
   methods: {
     toLogin() {
       const email = this.$refs.loginEmail.value;

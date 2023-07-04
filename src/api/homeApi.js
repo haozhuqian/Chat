@@ -1,10 +1,12 @@
 import axios from "./http";
 
 function getImg() {
+  console.log("getImg");
   return axios.get("/hello");
 }
 
 function getmsg(params) {
+  console.log("getmsg");
   console.log(params);
   return axios.post("/hello", { params });
 }

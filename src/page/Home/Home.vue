@@ -21,7 +21,10 @@
 <script>
 export default {
   mounted() {
-    console.log("home is mounted");}
+    if(this.$store.state.user.userMessage.id<0){
+      this.$router.push({name: "Login"});
+    }
+  }
 };
 </script>
 

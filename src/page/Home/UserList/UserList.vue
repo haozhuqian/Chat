@@ -2,23 +2,14 @@
   <div class="flex-box">
     <div class="userlist-box">
       <div class="userlist-input">
-        <input
-          type="text"
-          ref="findUserInput"
-          placeholder=" 输入邮箱添加新的好友"
-        />
+        <input type="text" ref="findUserInput" placeholder="输入邮箱添加新的好友" />
         <div class="addUser" @click="findUser">+</div>
       </div>
       <div class="message-box">
         <div class="sum">我的好友（{{ userList.length }}）</div>
-        <div
-          class="message-item"
-          v-for="item in userList"
-          @click="selectUser(item)"
-        >
+        <div class="message-item" v-for="item in userList" @click="selectUser(item)">
           <img :src="item.avatar" alt="" />
           <div class="name-box">{{ item.name }}</div>
-          <!-- <div class="time-box">{{item.time}}</div> -->
         </div>
       </div>
     </div>
@@ -44,7 +35,7 @@
           <div>{{ userMessage.email }}</div>
         </div>
       </div>
-      <div class="send-message" @click="sendMessage(userMessage.userId)">
+      <div class="send-message" @click="sendMessage(userMessage.id)">
         {{ getFriendState }}
       </div>
     </div>
@@ -54,72 +45,75 @@
 <script>
 export default {
   mounted() {
-    console.log("userList is mounted");
-    this.$api.userApi
-      .getAllFriends(this.$store.state.user.userMessage.userId)
-      .then((res) => {
-        res.forEach((e) => {
-          let arr = e?.lastTime.split("-");
-          e.lastTime = arr[0].slice(0, 2) + "/" + arr[1] + "/" + arr[2];
-        });
-        this.userList = res;
-        console.log(this.userList);
-      });
+    this.fetchList();
   },
   computed: {
     isEmpty() {
       return !this.userMessage == "";
     },
     getFriendState() {
-      return !this.isFriend ? "发消息" : "加好友";
+      return !this.Friend ? "发消息" : "加好友";
     },
   },
   methods: {
-    checkIsFriend(id) {
-      this.isFriend = this.userList.every((item) => {
-        return item.userId != id;
+    fetchList() {
+      this.$api.userApi
+        .getAllFriends(this.$store.state.user.userMessage.id)
+        .then((res) => {
+          this.userList = res;
+          console.log(res);
+        });
+    },
+    isFriend(id) {
+      this.friend = this.userList.every((item) => {
+        return item.id != id;
       });
     },
     findUser() {
       let str = this.$refs.findUserInput.value;
       this.$api.userApi.getUserInfoByEmail(str).then((res) => {
-        this.checkIsFriend(res.userId);
+        this.isFriend(res.id);
         this.userMessage = res;
+        console.log(res);
       });
     },
-    sendMessage(e) {
-      if (!this.isFriend) {
-        this.$store.commit("chat/changeUser", this.userMessage);
-        this.$router.push("/chat");
-      } else {
-        let sendUserId = this.$store.state.user.userMessage.userId;
-        const date = new Date();
-        let obj = {
-          sendUserId,
-          receiveUserId: e,
-          lastTime: `${date.getFullYear()}-${
-            date.getMonth() + 1
-          }-${date.getDate()}`,
-        };
-        this.$api.userApi.addFriend(obj).then((res) => {
-          this.$message({
-            message: "添加成功",
-            type: "success",
-          });
+    addFriend(obj) {
+      this.$api.userApi.addFriend(obj).then((res) => {
+        this.$message({
+          message: "添加成功",
+          type: "success",
         });
+        this.$api.userApi
+          .getAllFriends(this.$store.state.user.userMessage.id)
+          .then((res) => {
+            this.userList = res;
+          });
+      });
+    },
+    setChats(receiveId, sendId) {
+      let time = new Date();
+      time = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`;
+      this.$api.userApi.setChats({ receiveId, sendId, time, word: "" });
+      this.$store.commit("chat/changeUser", this.userMessage);
+      this.$router.push("/chat");
+    },
+    sendMessage(receiveId) {
+      let sendId = this.$store.state.user.userMessage.id;
+      if (!this.Friend) {
+        this.setChats(receiveId, sendId);
+      } else {
+        this.addFriend({ receiveId, sendId })
       }
     },
     selectUser(e) {
-      this.$api.userApi.getUserInfoById(e.userId).then((res) => {
-        this.userMessage = res;
-        this.checkIsFriend(e.userId);
-      });
+      this.userMessage = e;
+      this.isFriend(e.id);
     },
   },
   data() {
     return {
       userMessage: "",
-      isFriend: true,
+      friend: true,
       userList: [
         {
           name: "正宫",
@@ -142,13 +136,6 @@ export default {
           id: "12345",
           time: "20/1/02",
         },
-        {
-          name: "备胎三号",
-          avatar:
-            "https://tse1-mm.cn.bing.net/th/id/R-C.65a32f211b1e8a3a1540d96953618005?rik=KRp9q8QRwCuHhA&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f20200707170327105.jpg&ehk=YqgAZ9O6rbO1vgEfVvcbDxMWjtnbEFOrT%2baLGamBssg%3d&risl=&pid=ImgRaw&r=0",
-          id: "12345",
-          time: "20/1/02",
-        },
       ],
     };
   },
@@ -162,11 +149,13 @@ export default {
   line-height: 50px;
   background-color: #dedede;
 }
+
 .empty-box {
   position: absolute;
   left: 55%;
   top: 150px;
 }
+
 .addUser {
   position: relative;
   left: 50px;
@@ -181,20 +170,24 @@ export default {
   color: #2ba245;
   cursor: default;
 }
+
 .time-box {
   position: absolute;
   left: 220px;
   font-size: 12px;
   color: #888888;
 }
+
 .flex-box {
   display: flex;
 }
+
 .userlist-box {
   position: relative;
   width: 280px;
   height: 700px;
   background-color: #f7f7f7;
+
   .userlist-input {
     width: 200px;
     background-color: #e2e2e2;
@@ -202,11 +195,13 @@ export default {
     border-radius: 5px;
     margin: 10px;
     margin-top: 20px;
+
     input {
       position: relative;
       left: 30px;
     }
   }
+
   .message-box {
     position: absolute;
     bottom: 0;
@@ -214,6 +209,7 @@ export default {
     height: 630px;
     background-color: #f7f7f7;
     overflow-y: scroll;
+
     .message-item {
       display: flex;
       justify-content: space-around;
@@ -221,6 +217,7 @@ export default {
       height: 65px;
       line-height: 65px;
       background-color: #dedede;
+
       img {
         position: relative;
         top: 10px;
@@ -229,6 +226,7 @@ export default {
         height: 45px;
         display: block;
       }
+
       .name-box {
         margin-left: 5px;
         font-size: 18px;
@@ -239,15 +237,18 @@ export default {
         -o-text-overflow: ellipsis;
       }
     }
+
     .message-item:hover {
       background-color: #c9c6c6;
     }
   }
 }
+
 .userlist-info-box {
   position: relative;
   width: 660px;
   height: 700px;
+
   .userlist-info-top {
     width: 400px;
     position: absolute;
@@ -256,16 +257,19 @@ export default {
     top: 100px;
     display: flex;
     justify-content: space-between;
+
     div {
       word-wrap: break-word;
       font-size: 20px;
       width: 300px;
     }
+
     img {
       width: 70px;
       height: 70px;
     }
   }
+
   .userlist-info-main {
     width: 400px;
     height: 200px;
@@ -275,6 +279,7 @@ export default {
     top: 220px;
     border-top: 2px solid #c2c1c1;
     border-bottom: 2px solid #c2c1c1;
+
     .message-item {
       display: flex;
       width: 300px;
@@ -282,14 +287,17 @@ export default {
       font-size: 18px;
       justify-content: space-between;
     }
+
     .message-item :nth-child(1) {
       color: #c2c1c1;
     }
+
     .message-item :nth-child(2) {
       width: 200px;
     }
   }
 }
+
 .send-message {
   position: absolute;
   transform: translate(-50%);

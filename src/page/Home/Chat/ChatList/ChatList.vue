@@ -20,11 +20,9 @@
 <script>
 export default {
   mounted() {
-    console.log("chatList is mounted");
     this.$api.userApi
-      .getAllFriends(this.$store.state.user.userMessage.userId)
+      .getChats(this.$store.state.user.userMessage.id)
       .then((res) => {
-        console.log("get all friends");
         res.forEach((e) => {
           let arr = e?.lastTime.split("-");
           e.lastTime = arr[0].slice(0, 2) + "/" + arr[1] + "/" + arr[2];
@@ -72,13 +70,6 @@ export default {
           name: "备胎二号",
           avatar:
             "https://tse4-mm.cn.bing.net/th/id/OIP-C.TQcBnO20xnfq0rGqNdZdJQAAAA?pid=ImgDet&rs=1",
-          id: "12345",
-          lastTime: "20/1/02",
-        },
-        {
-          name: "备胎三号",
-          avatar:
-            "https://tse1-mm.cn.bing.net/th/id/R-C.65a32f211b1e8a3a1540d96953618005?rik=KRp9q8QRwCuHhA&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f20200707170327105.jpg&ehk=YqgAZ9O6rbO1vgEfVvcbDxMWjtnbEFOrT%2baLGamBssg%3d&risl=&pid=ImgRaw&r=0",
           id: "12345",
           lastTime: "20/1/02",
         },
