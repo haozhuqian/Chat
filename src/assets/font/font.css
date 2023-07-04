@@ -1,0 +1,7 @@
+@font-face {
+  /* 电子钟数字字体 */
+  font-family: "digital";
+  src: url("./digital.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
