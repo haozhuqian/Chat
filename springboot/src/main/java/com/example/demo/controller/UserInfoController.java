@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.webSocket.MyWebSocket.userInfoService;
 
 @RestController
 @RequestMapping
@@ -39,7 +38,7 @@ public class UserInfoController {
     }
     @PostMapping("/addFriend")
     public int addFriend(@RequestBody Relate userRelate){
-        if(!InfoS.isFriend(userRelate){
+        if(!InfoS.isFriend(userRelate)){
             InfoS.addFriend(userRelate);
         }
         return 1;

@@ -11,6 +11,9 @@ module.exports = {
       patterns: [path.resolve(__dirname, "src/themes/themes.less")],
     },
   },
+  devServer: {
+    port: 8888 // 将默认端口号设置为 8080
+  },
   configureWebpack: (config) => {
     config.module.rules.push({
       test: /\.mjs$/,
