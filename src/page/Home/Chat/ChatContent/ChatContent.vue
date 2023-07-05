@@ -26,19 +26,6 @@
 <script>
 import ChatItem from "./ChatItem.vue";
 export default {
-  created() {
-    /* let userInfo = this.$store.state.user.Me;
-      console.log(userInfo);
-      let obj = {
-        sendUserName: userInfo.name,
-        sendUserAvatar: userInfo.avatar,
-        receiveId: this.$store.state.chat.You.id,
-        sendId: userInfo.id,
-        sendContent: this.$refs.chatInput.value,
-      };
-      this.messageList.push(obj); */
-
-  },
   mounted() {
     this.conectWebSocket();
   },
@@ -66,10 +53,6 @@ export default {
     conectWebSocket() {
       let nickname = this.$store.state.user.Me.name;
       let that = this;
-      if (nickname === "") {
-        alert("请输入昵称");
-        return;
-      }
       //判断当前浏览器是否支持WebSocket
       if ("WebSocket" in window) {
         this.websocket = new WebSocket(
@@ -92,7 +75,7 @@ export default {
         let message = JSON.parse(event.data);
         console.log(message);
         console.log(that.$store.state.user.Me.id);
-        if (message.receiveId == that.$store.state.user.Me.id && message.sendId == that.$store.state.user.You.receiveId) {
+        if (message.receiveId == that.$store.state.user.Me.id && message.sendId == that.$store.state.chat.You.receiveId) {
           that.messageList.push(message);
           console.log("我是that.messageList啦啦啦啦啦", that.messageList);
         }
@@ -133,8 +116,7 @@ export default {
             sendId: i.sendId,
             message: i.message,
           }
-          console.log("historyChatObj", historyChatObj);
-          this.messageList.push(historyChatObj);
+          this.messageList.unshift(historyChatObj);
         });
         console.log(this.messageList);
       }).catch((err) => {

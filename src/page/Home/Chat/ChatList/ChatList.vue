@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     selectYou(e) {
-      console.log(e);
+      console.log("selectYou",e);
       this.$store.commit("chat/setYou", e);
       console.log(this.$store.state.chat.You.receiveId);
     },

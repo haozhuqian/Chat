@@ -25,10 +25,6 @@
     var websocket = null;
     function conectWebSocket() {
       var nickname = document.getElementById("nickname").value;
-      if (nickname === "") {
-        alert("请输入昵称");
-        return;
-      }
       //判断当前浏览器是否支持WebSocket
       if ("WebSocket" in window) {
         websocket = new WebSocket("ws://localhost:8888/websocket/" + nickname);
