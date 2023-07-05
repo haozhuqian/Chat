@@ -52,27 +52,26 @@ export default {
       return !this.userMessage == "";
     },
     getFriendState() {
-      return !this.Friend ? "发消息" : "加好友";
+      return this.isFriend ? "发消息" : "加好友";
+    },
+    isFriend() {
+      console.log(this.userList);
+      console.log((this.userList.length==0)?false:this.userList.every((item) => item.id != this.userMessage.id));
+      return (this.userList.length==0)?false:(!this.userList.every((item) => item.id != this.userMessage.id));
     },
   },
   methods: {
     fetchList() {
       this.$api.userApi
-        .getAllFriends(this.$store.state.user.userMessage.id)
+        .getAllFriends(this.$store.state.user.Me.id)
         .then((res) => {
           this.userList = res;
           console.log(res);
         });
     },
-    isFriend(id) {
-      this.friend = this.userList.every((item) => {
-        return item.id != id;
-      });
-    },
     findUser() {
       let str = this.$refs.findUserInput.value;
       this.$api.userApi.getUserInfoByEmail(str).then((res) => {
-        this.isFriend(res.id);
         this.userMessage = res;
         console.log(res);
       });
@@ -84,7 +83,7 @@ export default {
           type: "success",
         });
         this.$api.userApi
-          .getAllFriends(this.$store.state.user.userMessage.id)
+          .getAllFriends(this.$store.state.user.Me.id)
           .then((res) => {
             this.userList = res;
           });
@@ -94,12 +93,12 @@ export default {
       let time = new Date();
       time = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`;
       this.$api.userApi.setChats({ receiveId, sendId, time, word: "" });
-      this.$store.commit("chat/changeUser", this.userMessage);
+      this.$store.commit("chat/setYou", this.userMessage);
       this.$router.push("/chat");
     },
     sendMessage(receiveId) {
-      let sendId = this.$store.state.user.userMessage.id;
-      if (!this.Friend) {
+      let sendId = this.$store.state.user.Me.id;
+      if (this.isFriend) {
         this.setChats(receiveId, sendId);
       } else {
         this.addFriend({ receiveId, sendId })
@@ -107,7 +106,6 @@ export default {
     },
     selectUser(e) {
       this.userMessage = e;
-      this.isFriend(e.id);
     },
   },
   data() {

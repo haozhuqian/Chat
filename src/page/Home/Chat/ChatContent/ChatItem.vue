@@ -4,7 +4,7 @@
       <img :src="msg.sendUserAvatar" alt="" />
       <div>
         <div class="userName">{{ msg.sendUserName }}</div>
-        <div class="message-box">{{ msg.sendContent }}</div>
+        <div class="message-box">{{ msg.message }}</div>
       </div>
     </div>
     <div class="chat-item-box-self" v-if="isSelf">
@@ -12,7 +12,7 @@
       <div>
         <div class="userName">{{ msg.sendUserName }}</div>
         <div class="message-box">
-          <div class="inner-box">{{ msg.sendContent }}</div>
+          <div class="inner-box">{{ msg.message }}</div>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     isSelf() {
-      return this.msg.sendUserId == this.$store.state.user.userMessage.userId;
+      return this.msg.sendId == this.$store.state.user.Me.id;
     },
 
   },

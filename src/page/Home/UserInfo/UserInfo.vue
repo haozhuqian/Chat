@@ -46,7 +46,8 @@ export default {
     [...document.getElementsByClassName("isInput")].forEach((e) => {
       e.setAttribute("disabled", "disabled");
     });
-    this.userMessage = this.$store.state.user.userMessage;
+    this.userMessage = this.$store.state.user.Me;
+    console.log();
   },
   methods: {
     updateAvatar() {
@@ -101,7 +102,7 @@ export default {
         gender: "男",
         region: "山西临汾",
         email: "3094969938@qq.com",
-        userId: 0,
+        id: 0,
       },
     };
   },

@@ -13,4 +13,9 @@ public class Chat {
     private  String time;
     private  int sendId;
     private  int receiveId;
+    public void exchangeId(){
+        int cup=this.sendId;
+        this.sendId=this.receiveId;
+        this.receiveId=cup;
+    }
 }

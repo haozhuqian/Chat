@@ -1,14 +1,13 @@
 package com.example.demo.services;
 
-import com.example.demo.pojo.ChatMessage;
-import org.springframework.stereotype.Service;
+import com.example.demo.pojo.Message;
 
 import java.util.List;
 
 public interface ChatMessageService {
 
-    List<ChatMessage> getChatHistory(Long sendUerId, Long receiveUserId);
+    List<Message> getChatHistory(int sendId, int receiveId);
 
-    void saveChatMessage(ChatMessage chatMessage);
+    void saveChatMessage(Message message);
 
 }

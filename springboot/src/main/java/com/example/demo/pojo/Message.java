@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatMessage {
-    private Long id;
-    private Long sendId;
-    private Long receiveId;
-    private String sendContent;
-    private String sendTime;
+public class Message {
+    private int id;
+    private int sendId;
+    private int receiveId;
+    private String message;
+    private String time;
 }

@@ -21,7 +21,7 @@
 <script>
 export default {
   mounted() {
-    if(this.$store.state.user.userMessage.id<0){
+    if(this.$store.state.user.Me.id<0){
       this.$router.push({name: "Login"});
     }
   }

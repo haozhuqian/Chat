@@ -27,6 +27,8 @@ public class UserInfoServiceImpI implements UserInfoService {
     @Override
     public List<Chat> getChats(int id){ return userInfoMapper.getChats(id);}
     @Override
+    public boolean hasChats(Chat chat){ return userInfoMapper.hasChats(chat); }
+    @Override
     public int setChats(Chat chat){ return userInfoMapper.setChats(chat); };
     //    添加好友
     @Override

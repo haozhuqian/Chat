@@ -2,7 +2,7 @@ package com.example.demo.webSocket;
 
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.pojo.ChatMessage;
+import com.example.demo.pojo.Message;
 import com.example.demo.services.ChatMessageService;
 import com.example.demo.services.UserInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,14 +61,14 @@ public class MyWebSocket {
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("nickname") String nickname) {
         ObjectMapper mapper = new ObjectMapper();
-        ChatMessage chatMessage;
+        Message chatMessage;
         try {
-            chatMessage = mapper.readValue(message, ChatMessage.class);
+            chatMessage = mapper.readValue(message, Message.class);
             log.info(JSON.toJSONString(chatMessage));
             SimpleDateFormat format  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-            String sendTime = format.format(date);
-            chatMessage.setSendTime(sendTime);
+            String time = format.format(date);
+            chatMessage.setTime(time);
             chatMessageService.saveChatMessage(chatMessage); // 将ChatMessage对象存入数据库中
             broadcast(message);
 
@@ -77,8 +77,6 @@ public class MyWebSocket {
         }
 
         System.out.println("来自客户端的消息-->" + nickname + ": " + message);
-        // 群发消息
-        broadcast(message);
     }
 
     @OnError

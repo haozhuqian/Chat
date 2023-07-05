@@ -7,11 +7,11 @@
       <div
         class="message-item"
         v-for="item in showList"
-        @click="selectChatUser(item)"
+        @click="selectYou(item)"
       >
         <img :src="item.avatar" alt="" />
         <div class="name-box">{{ item.name }}</div>
-        <div class="time-box">{{ item.lastTime }}</div>
+        <div class="time-box">{{ item.time }}</div>
       </div>
     </div>
   </div>
@@ -21,11 +21,12 @@
 export default {
   mounted() {
     this.$api.userApi
-      .getChats(this.$store.state.user.userMessage.id)
+      .getChats(this.$store.state.user.Me.id)
       .then((res) => {
+        console.log(res);
         res.forEach((e) => {
-          let arr = e?.lastTime.split("-");
-          e.lastTime = arr[0].slice(0, 2) + "/" + arr[1] + "/" + arr[2];
+          let arr = e?.time.split("-");
+          e.time = arr[0].slice(0, 2) + "/" + arr[1] + "/" + arr[2];
         });
         this.userList = res;
       });
@@ -43,9 +44,10 @@ export default {
     },
   },
   methods: {
-    selectChatUser(e) {
-      this.$store.commit("chat/changeUser", e);
-      console.log(this.$store.state.chat.chatUser.userId);
+    selectYou(e) {
+      console.log(e);
+      this.$store.commit("chat/setYou", e);
+      console.log(this.$store.state.chat.You.receiveId);
     },
   },
   data() {

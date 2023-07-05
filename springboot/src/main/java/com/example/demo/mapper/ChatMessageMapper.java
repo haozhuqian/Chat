@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.pojo.ChatMessage;
+import com.example.demo.pojo.Message;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface ChatMessageMapper {
 
-    List<ChatMessage> getChatHistory(Long sendUserId, Long receiveUserId);
+    List<Message> getChatHistory(int sendId, int receiveId);
 
-    void insertChatMessage(ChatMessage chatMessage);
+    void insertChatMessage(Message message);
 
 }

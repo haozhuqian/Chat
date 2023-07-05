@@ -15,6 +15,9 @@
     <select id="getChats" resultType="com.example.demo.pojo.Chat">
     select * from chat_db where chat_db.sendId=#{id};
     </select>
+    <select id="hasChats" parameterType="com.example.demo.pojo.Chat" resultType="boolean">
+        select EXISTS (SELECT * FROM chat_db WHERE sendId=#{sendId} and receiveId=#{receiveId}) ;
+    </select>
     <insert id="setChats" parameterType="com.example.demo.pojo.Chat">
         insert into chat_db (sendId,receiveId,word,time) values(#{sendId},#{receiveId},#{word},#{time});
     </insert>

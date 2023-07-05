@@ -3,27 +3,17 @@
 
 <mapper namespace="com.example.demo.mapper.ChatMessageMapper">
 
-    <resultMap id="chatMessageResultMap" type="com.example.demo.pojo.ChatMessage">
-        <id property="id" column="id" />
-        <result property="sendUserId" column="send_user_id" />
-        <result property="receiveUserId" column="receive_user_id" />
-        <result property="sendContent" column="send_content" />
-        <result property="sendTime" column="send_time" />
-        <result property="createTime" column="create_time"/>
-        <result property="sendUserAvatar" column="send_user_avatar"/>
-    </resultMap>
 
-    <select id="getChatHistory" resultMap="chatMessageResultMap">
-        SELECT id, send_user_id, receive_user_id, send_content, send_time,send_user_avatar
-        FROM chat_message
-        WHERE (send_user_id = #{sendUserId} AND  receive_user_id = #{receiveUserId})
-        OR (send_user_id = #{receiveUserId} AND receive_user_id = #{sendUserId})
-        ORDER BY send_time ASC
+    <select id="getChatHistory" resultType="com.example.demo.pojo.Message" parameterType="com.example.demo.pojo.Relate">
+        SELECT id, sendId, receiveId, message, time
+        FROM message_db
+        WHERE (sendId = #{sendId} AND  receiveId = #{receiveId})
+        OR (sendId = #{receiveId} AND receiveId = #{sendId})
+        ORDER BY time ASC
     </select>
 
-    <insert id="insertChatMessage">
-        INSERT INTO chat_message( send_user_id, receive_user_id, send_content, send_time,send_user_name,receive_user_name,send_user_avatar )
-        VALUES (#{sendUserId}, #{receiveUserId}, #{sendContent}, #{sendTime}, #{sendUserName}, #{receiveUserName},#{sendUserAvatar})
+    <insert id="insertChatMessage" parameterType="com.example.demo.pojo.Message">
+        INSERT INTO message_db( sendId, receiveId, message, time) VALUES (#{sendId}, #{receiveId}, #{message}, #{time})
     </insert>
 
 </mapper>

@@ -1,6 +1,6 @@
 export default {
   state: {
-    userMessage: {
+    Me: {
       id: -1,
       name: "",
       avatar:
@@ -8,8 +8,8 @@ export default {
     },
   },
   mutations: {
-    changeInfo(state, val) {
-      state.userMessage = val;
+    setMe(state, val) {
+      state.Me = val;
     },
   },
   actions: {},

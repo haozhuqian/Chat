@@ -19,6 +19,8 @@ public interface UserInfoMapper {
     public User getInfoByEmail(String email);
 
     public List<Chat> getChats(int id);
+
+    public boolean hasChats(Chat chat);
     public int setChats(Chat chat);
 //    添加好友
     public int addFriend(Relate newFriend);

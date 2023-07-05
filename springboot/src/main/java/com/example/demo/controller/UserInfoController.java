@@ -30,7 +30,11 @@ public class UserInfoController {
     }
     @PostMapping("/setChats")
     public int setChats(@RequestBody Chat chat){
-        InfoS.setChats(chat);
+        if(!InfoS.hasChats(chat)){
+            InfoS.setChats(chat);
+            chat.exchangeId();
+            InfoS.setChats(chat);
+        }
         return 1;
     }
     @GetMapping("/getAllFriends")

@@ -38,7 +38,7 @@ export default {
             this.$message.error(res.fail);
           } 
           if (res.success) {
-            this.$store.commit("user/changeInfo", res.success);
+            this.$store.commit("user/setMe", res.success);
             this.$router.push("/chat");
           }
         },

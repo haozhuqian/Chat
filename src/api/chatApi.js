@@ -2,7 +2,7 @@ import axios from "./http";
 
 function getChatHistory(sendUserId,receiveUserId) {
   console.log("getChatHistory");
-  return axios.get("/chat/getChatHistory?sendUserId=" + sendUserId + "&receiveUserId=" + receiveUserId);
+  return axios.get("/chat/getChatHistory?sendId=" + sendUserId + "&receiveId=" + receiveUserId);
 }
 
 function getmsg(params) {
