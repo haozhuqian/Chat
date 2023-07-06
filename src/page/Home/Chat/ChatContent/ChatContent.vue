@@ -8,11 +8,10 @@
         <div class="chat-name-box">{{ $store.state.chat.You.name }}</div>
       </div>
       <div>
-        <div>
-          <div class="get-chat-history" @click="getChatHistory">获取历史聊天记录</div>
-        </div>
+
         <div class="chat-main-box">
           <chat-item :msg="item" v-for="item in messageList"></chat-item>
+          <div class="chat-history" @click="getChatHistory">点击获取历史聊天记录</div>
         </div>
       </div>
       <div class="chat-input-box">
@@ -35,10 +34,10 @@ export default {
   },
   computed: {
     showChatBox() {
-      return this.$store.state.chat.You.receiveId != undefined;
+      return this.$store.state.chat.You.id != undefined;
     },
     getChatState() {
-      return this.$store.state.chat.You.receiveId;
+      return this.$store.state.chat.You.id;
     },
   },
   components: {
@@ -75,8 +74,8 @@ export default {
         let message = JSON.parse(event.data);
         console.log(message);
         console.log(that.$store.state.user.Me.id);
-        if (message.receiveId == that.$store.state.user.Me.id && message.sendId == that.$store.state.chat.You.receiveId) {
-          that.messageList.push(message);
+        if (message.receiveId == that.$store.state.user.Me.id && message.sendId == that.$store.state.chat.You.id) {
+          that.messageList.unshift(message);
           console.log("我是that.messageList啦啦啦啦啦", that.messageList);
         }
       };
@@ -94,20 +93,20 @@ export default {
       console.log(userInfo);
 
       let obj = {
-        receiveId: this.$store.state.chat.You.receiveId,
+        receiveId: this.$store.state.chat.You.id,
         sendId: userInfo.id,
         message: this.$refs.chatInput.value,
       };
       this.websocket.send(JSON.stringify(obj));
       console.log(this.messageList);
       console.log("sendMessage");
-      this.messageList.push(obj);
+      this.messageList.unshift(obj);
       console.log(this.messageList);
       this.$refs.chatInput.value = "";
     },
     getChatHistory() {
       let sendId = this.$store.state.user.Me.id;
-      let receiveId = this.$store.state.chat.You.receiveId;
+      let receiveId = this.$store.state.chat.You.id;
       this.$api.chatApi.getChatHistory(sendId, receiveId).then((res) => {
         console.log(res);
         res.forEach(i => {
@@ -150,25 +149,27 @@ export default {
 }
 
 .chat-box {
+  box-sizing: border-box;
   position: relative;
   width: 660px;
   height: 700px;
+  border-left: 2px solid #cccccc;
 }
 
 .chat-top-box {
+  box-sizing: border-box;
   width: 100%;
   height: 70px;
   background-color: #f5f5f5;
-  border-bottom: 1px solid #e6e5e5;
-  border-left: 1px solid #e6e5e5;
+  border-bottom: 2px solid #dddddd;
 }
 
 .chat-name-box {
   width: 450px;
   height: 70px;
   line-height: 70px;
-  font-size: 22px;
-  margin-left: 40px;
+  font-size: 24px;
+  margin-left: 24px;
 }
 
 .chat-main-box {
@@ -176,18 +177,29 @@ export default {
   height: 468px;
   overflow-y: scroll;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+
+  display: flex;
+  flex-direction: column-reverse;
+
+  .chat-history {
+    height: 20px;
+    line-height: 20px;
+    font-size: 10px;
+    text-align: center;
+    background-color: transparent;
+    color: #666666;
+    font-size: 8px;
+  }
 }
 
 .chat-input-box {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  box-sizing: border-box;
   height: 160px;
-  border-top: 1px solid #e6e5e5;
+  border-top: 2px solid #dddddd;
+  padding: 20px 30px;
 
   #chat-input {
-    margin-top: 20px;
-    margin-left: 30px;
     width: 90%;
     font-size: 18px;
     height: 80px;
@@ -199,8 +211,8 @@ export default {
 
   .send-btn {
     position: absolute;
-    right: 40px;
-    margin: 10px;
+    right: 20px;
+    bottom: 10px;
     width: 100px;
     height: 35px;
     background-color: #e9e9e9;
@@ -210,14 +222,6 @@ export default {
     border-radius: 5px;
   }
 
-  .get-chat-history {
-    width: 20px;
-    height: 8px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: red;
-    color: aquamarine;
-    font-size: 8px;
-  }
+ 
 }
 </style>

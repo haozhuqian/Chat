@@ -1,20 +1,16 @@
 <template>
-  <div class="outer-box">
+  <div class="outer-box" :class="{ self: isSelf }">
     <div class="chat-item-box" v-if="!isSelf">
       <img :src="msg.sendUserAvatar" alt="" />
-      <div>
-        <div class="userName">{{ msg.sendUserName }}</div>
-        <div class="message-box">{{ msg.message }}</div>
-      </div>
+      <div class="message-box">{{ msg.message }}</div>
     </div>
     <div class="chat-item-box-self" v-if="isSelf">
-      <img :src="msg.sendUserAvatar" alt="" />
       <div>
-        <div class="userName">{{ msg.sendUserName }}</div>
-        <div class="message-box">
-          <div class="inner-box">{{ msg.message }}</div>
-        </div>
+        <div class="message-box">{{ msg.message }}</div>
+
       </div>
+
+      <img :src="msg.sendUserAvatar" alt="" />
     </div>
   </div>
 </template>
@@ -33,20 +29,26 @@ export default {
     },
 
   },
-  
+
 };
 </script>
 
 <style lang="less" scoped>
+.self {
+  flex-direction: row-reverse;
+}
+
 .outer-box {
-  position: relative;
-  width: 600px;
+  display: flex;
+  width: 630px;
   height: auto;
-  margin: 15px auto;
+  margin: 5px auto;
+
   .chat-item-box,
   .chat-item-box-self {
     position: relative;
     display: flex;
+
     img {
       position: relative;
       top: 0;
@@ -54,53 +56,41 @@ export default {
       height: 40px;
       display: block;
     }
-    .userName {
-      position: relative;
-      width: 200px;
-      left: 10px;
-      top: 0px;
-      font-size: 14px;
-      color: #9b9a9a;
-      // color: red;
-    }
+
     .message-box {
+      font-size: 14px;
       position: relative;
-      top: 5px;
-      left: 10px;
       display: inline-block;
       max-width: 300px;
       border-radius: 5px;
-      background-color: white;
-      padding: 10px;
+      padding: 11px;
       word-wrap: break-word;
     }
   }
+
+  .chat-item-box {
+    img {
+      left: 0;
+    }
+
+    .message-box {
+      left: 10px;
+
+      background-color: white;
+    }
+  }
+
   .chat-item-box-self {
     img {
-      position: absolute;
-      right: 0rem;
+      right: 0;
     }
-    .userName {
-      left: 350px;
-      text-align: right;
-    }
+
     .message-box {
-      left: 240px;
-      width: 300px;
+      right: 10px;
       display: flex;
       flex-direction: row-reverse;
-      background-color: transparent;
-      word-wrap: break-word;
-      .inner-box {
-        position: relative;
-        top: -10px;
-        background-color: #95ec69;
-        word-break: break-all;
-        display: inline-block;
-        padding: 10px;
-        border-radius: 5px;
-      }
+      background-color: #95ec69;
+
     }
   }
-}
-</style>
+}</style>

@@ -4,11 +4,7 @@
       <input type="text" placeholder=" 搜索" v-model="searchUser" />
     </div>
     <div class="message-box">
-      <div
-        class="message-item"
-        v-for="item in showList"
-        @click="selectYou(item)"
-      >
+      <div class="message-item" v-for="item in showList" @click="selectYou(item)">
         <img :src="item.avatar" alt="" />
         <div class="name-box">{{ item.name }}</div>
         <div class="time-box">{{ item.time }}</div>
@@ -45,9 +41,11 @@ export default {
   },
   methods: {
     selectYou(e) {
-      console.log("selectYou",e);
-      this.$store.commit("chat/setYou", e);
-      console.log(this.$store.state.chat.You.receiveId);
+      this.$api.userApi.getUserInfoById(e.receiveId).then((res) => {
+        console.log("selectYou", res);
+        this.$store.commit("chat/setYou", res);
+        console.log(this.$store.state.chat.You);
+      })
     },
   },
   data() {
@@ -88,11 +86,13 @@ export default {
   font-size: 12px;
   color: #888888;
 }
+
 .chatlist-box {
   position: relative;
   width: 280px;
   height: 700px;
   background-color: #f7f7f7;
+
   .chatlist-input {
     width: 200px;
     background-color: #e2e2e2;
@@ -100,11 +100,13 @@ export default {
     border-radius: 5px;
     margin: 10px;
     margin-top: 20px;
+
     input {
       position: relative;
       left: 30px;
     }
   }
+
   .message-box {
     position: absolute;
     bottom: 0;
@@ -112,6 +114,7 @@ export default {
     height: 630px;
     background-color: #f7f7f7;
     overflow-y: scroll;
+
     .message-item {
       display: flex;
       justify-content: space-around;
@@ -119,6 +122,7 @@ export default {
       height: 65px;
       line-height: 65px;
       background-color: #dedede;
+
       img {
         position: relative;
         top: 10px;
@@ -127,6 +131,7 @@ export default {
         height: 45px;
         display: block;
       }
+
       .name-box {
         font-size: 18px;
         width: 200px;
@@ -137,9 +142,9 @@ export default {
         -o-text-overflow: ellipsis;
       }
     }
+
     .message-item:hover {
       background-color: #c9c6c6;
     }
   }
-}
-</style>
+}</style>

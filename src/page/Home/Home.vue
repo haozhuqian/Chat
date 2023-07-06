@@ -32,6 +32,7 @@ export default {
 .home-outer-box {
   width: 1000px;
   height: 700px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 1);
   background-color: #f5f5f5;
   position: absolute;
   transform: translate(-50%, -50%);

@@ -24,7 +24,7 @@ input {
   background: transparent;
 }
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.1);
