@@ -3,7 +3,7 @@
     <div class="login-box-outer">
       <div class="login-box-top">
         <img src="../../assets/img/Login/logo.png" alt="" />
-        <span class="name">微信·WeChat</span>
+        <span class="name">仿微信·Chat</span>
         <div class="header-icon-box">
           <img src="../../assets/img/Login/header.png" alt="" />
         </div>
@@ -58,7 +58,7 @@ export default {
         this.$message.error("两次密码不一致哦！");
         return;
       }
-      this.$api.loginApi.Register({ email, password }).then(
+      this.$api.loginApi.Register({ email, password ,name:email,region:"未知地区",gender:"未知性别"}).then(
         (res) => {
           if ((res = "success")) {
             this.$message({

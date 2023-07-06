@@ -38,6 +38,7 @@ public class LoginController {
     @PostMapping("/Register")
     //注册
     public String toRegisterSuccess( @RequestBody User user){
+        
         //将账号密码加入到数据库中
         loginS.addUser(user.getEmail(), user.getPassword());
         return "RegisterSuccess";

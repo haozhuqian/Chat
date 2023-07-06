@@ -1,7 +1,7 @@
 <template>
   <div class="chatlist-box">
     <div class="chatlist-input">
-      <input type="text" placeholder=" 搜索" v-model="searchUser" />
+      <input type="text" placeholder="没做好功能的搜索" v-model="searchUser"/>
     </div>
     <div class="message-box">
       <div class="message-item" v-for="item in showList" @click="selectYou(item)">
@@ -41,11 +41,9 @@ export default {
   },
   methods: {
     selectYou(e) {
-      this.$api.userApi.getUserInfoById(e.receiveId).then((res) => {
-        console.log("selectYou", res);
-        this.$store.commit("chat/setYou", res);
+        console.log("selectYou", e);
+        this.$store.commit("chat/setYou", e);
         console.log(this.$store.state.chat.You);
-      })
     },
   },
   data() {
@@ -53,26 +51,12 @@ export default {
       searchUser: "",
       userList: [
         {
-          name: "正宫",
+          name: "错误，没有收到信息",
           avatar:
             "https://tse1-mm.cn.bing.net/th/id/R-C.1a9d433a22667c6c6d6efbf62813912f?rik=Fx8X42YAcP2jVA&riu=http%3a%2f%2ffile.qqtouxiang.com%2fqinglv%2f2020-06-05%2f9737315e4f6a72e89a1e9ea4223fd34a.jpg&ehk=%2fuNqDi0KYfHWCuZ2yhjcH%2b8VVrehNZFnWAvekVZvhUw%3d&risl=&pid=ImgRaw&r=0",
           id: "12345",
           lastTime: "20/1/02",
-        },
-        {
-          name: "备胎一号",
-          avatar:
-            "https://img2.woyaogexing.com/2020/10/09/222a2de17e87421285c352b050f2c47d!400x400.jpeg",
-          id: "12345",
-          lastTime: "20/1/02",
-        },
-        {
-          name: "备胎二号",
-          avatar:
-            "https://tse4-mm.cn.bing.net/th/id/OIP-C.TQcBnO20xnfq0rGqNdZdJQAAAA?pid=ImgDet&rs=1",
-          id: "12345",
-          lastTime: "20/1/02",
-        },
+        }
       ],
     };
   },
@@ -80,6 +64,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::-webkit-scrollbar {
+  float: right;
+  width: 0px;
+}
 .time-box {
   position: absolute;
   left: 220px;
@@ -98,12 +86,11 @@ export default {
     background-color: #e2e2e2;
     height: 25px;
     border-radius: 5px;
-    margin: 10px;
-    margin-top: 20px;
-
+    margin: 22px auto;
     input {
-      position: relative;
-      left: 30px;
+      height: 25px;
+      line-height: 25px;
+      padding: 0px 20px;
     }
   }
 

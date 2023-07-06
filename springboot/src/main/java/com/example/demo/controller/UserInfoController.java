@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.pojo.Chat;
+import com.example.demo.pojo.ChatItem;
 import com.example.demo.pojo.User;
 import com.example.demo.pojo.Relate;
 import com.example.demo.services.UserInfoService;
@@ -24,9 +25,20 @@ public class UserInfoController {
         return "success";
     }
     @GetMapping("/getChats")
-    public List<Chat> getChats(@RequestParam("id") int id){
-        List<Chat> ChatList= InfoS.getChats(id);
-        return ChatList;
+    public List<ChatItem> getChats(@RequestParam("id") int id){
+        List<Chat> ChatList = InfoS.getChats(id);
+        List<ChatItem> ChatInfoList = new ArrayList<ChatItem>();
+        for (Chat c: ChatList){
+            User u = InfoS.getInfoById(c.getReceiveId());
+            ChatItem ci = new ChatItem();
+            ci.setId(u.getId());
+            ci.setAvatar(u.getAvatar());
+            ci.setName(u.getName());
+            ci.setTime(c.getTime());
+            ci.setWord(c.getWord());
+            ChatInfoList.add(ci);
+        }
+        return ChatInfoList;
     }
     @PostMapping("/setChats")
     public int setChats(@RequestBody Chat chat){

@@ -90,8 +90,10 @@ export default {
     },
     sendMessage() {
       let userInfo = this.$store.state.user.Me;
-      console.log(userInfo);
-
+      if(/^\s*$/.test(this.$refs.chatInput.value)){
+        this.$message.error("不能发送空消息");
+        return;
+      }
       let obj = {
         receiveId: this.$store.state.chat.You.id,
         sendId: userInfo.id,
@@ -153,7 +155,7 @@ export default {
   position: relative;
   width: 660px;
   height: 700px;
-  border-left: 2px solid #cccccc;
+  border-left: 2px solid #aaaaaa;
 }
 
 .chat-top-box {
@@ -161,7 +163,7 @@ export default {
   width: 100%;
   height: 70px;
   background-color: #f5f5f5;
-  border-bottom: 2px solid #dddddd;
+  border-bottom: 2px solid #bbbbbb;
 }
 
 .chat-name-box {
@@ -196,7 +198,7 @@ export default {
 .chat-input-box {
   box-sizing: border-box;
   height: 160px;
-  border-top: 2px solid #dddddd;
+  border-top: 2px solid #bbbbbb;
   padding: 20px 30px;
 
   #chat-input {
