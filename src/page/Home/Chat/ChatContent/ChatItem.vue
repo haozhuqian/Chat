@@ -1,16 +1,14 @@
 <template>
   <div class="outer-box" :class="{ self: isSelf }">
     <div class="chat-item-box" v-if="!isSelf">
-      <img :src="msg.sendUserAvatar" alt="" />
+      <img :src="$store.state.chat.You.avatar" alt=""/>
       <div class="message-box">{{ msg.message }}</div>
     </div>
     <div class="chat-item-box-self" v-if="isSelf">
       <div>
         <div class="message-box">{{ msg.message }}</div>
-
       </div>
-
-      <img :src="msg.sendUserAvatar" alt="" />
+      <img :src="$store.state.user.Me.avatar" alt="" />
     </div>
   </div>
 </template>
@@ -24,11 +22,18 @@ export default {
     },
   },
   computed: {
+    
     isSelf() {
+      console.log(this.msg.avatar);
       return this.msg.sendId == this.$store.state.user.Me.id;
     },
 
   },
+  methods:{
+    show(){
+      console.log(this.msg);
+    },
+  }
 
 };
 </script>
@@ -40,7 +45,7 @@ export default {
 
 .outer-box {
   display: flex;
-  width: 630px;
+  width: 100%;
   height: auto;
   margin: 5px auto;
 
@@ -55,13 +60,14 @@ export default {
       width: 40px;
       height: 40px;
       display: block;
+      border-radius: 100%;
     }
 
     .message-box {
       font-size: 14px;
       position: relative;
       display: inline-block;
-      max-width: 300px;
+      max-width: 350px;
       border-radius: 5px;
       padding: 11px;
       word-wrap: break-word;
@@ -70,7 +76,7 @@ export default {
 
   .chat-item-box {
     img {
-      left: 0;
+      left: 10px;
     }
 
     .message-box {
@@ -82,7 +88,7 @@ export default {
 
   .chat-item-box-self {
     img {
-      right: 0;
+      right: 10px;
     }
 
     .message-box {

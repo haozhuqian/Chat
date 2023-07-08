@@ -14,5 +14,5 @@ public interface UserLoginService {
 
     public int login(User user);
 
-    public int addUser(String email,String password);
+    public int addUser(User user);
 }

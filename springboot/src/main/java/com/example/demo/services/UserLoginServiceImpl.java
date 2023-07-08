@@ -24,5 +24,5 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Override
     public int login(User user) { return userLoginMapper.login(user); }
     @Override
-    public int addUser(String email,String password){return  userLoginMapper.addUser(email,password);}
+    public int addUser(User user){return  userLoginMapper.addUser(user);}
 }

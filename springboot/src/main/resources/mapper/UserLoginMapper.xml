@@ -32,12 +32,12 @@
         insert into login_db (id,email) values (#{id},#{email})
     </insert>
 
-    <delete id="unlogin">
+    <delete id="unlogin" >
         DELETE FROM login_db WHERE id = #{id};
     </delete>
 
-    <insert id="addUser" >
-        insert into user_db (email,password) value (#{email},#{password});
+    <insert id="addUser" parameterType="com.example.demo.pojo.User">
+        insert into user_db (email,password) value (#{email},#{password},#{gender},#{region},#{avatar},#{name});
     </insert>
 
 </mapper>

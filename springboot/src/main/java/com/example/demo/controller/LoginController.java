@@ -38,9 +38,9 @@ public class LoginController {
     @PostMapping("/Register")
     //注册
     public String toRegisterSuccess( @RequestBody User user){
-        
+        System.out.println(user.toString());
         //将账号密码加入到数据库中
-        loginS.addUser(user.getEmail(), user.getPassword());
+        loginS.addUser(user);
         return "RegisterSuccess";
     }
 }

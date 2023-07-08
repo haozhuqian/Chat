@@ -65,7 +65,6 @@ export default {
 
 <style lang="less" scoped>
 ::-webkit-scrollbar {
-  float: right;
   width: 0px;
 }
 .time-box {
@@ -117,12 +116,13 @@ export default {
         width: 45px;
         height: 45px;
         display: block;
+        border-radius: 100%;
       }
 
       .name-box {
         font-size: 18px;
         width: 200px;
-        margin-left: 5px;
+        margin-left: 25px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

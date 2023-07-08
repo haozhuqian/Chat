@@ -114,23 +114,9 @@ export default {
       friend: true,
       userList: [
         {
-          name: "正宫",
+          name: "没有数据",
           avatar:
             "https://tse1-mm.cn.bing.net/th/id/R-C.1a9d433a22667c6c6d6efbf62813912f?rik=Fx8X42YAcP2jVA&riu=http%3a%2f%2ffile.qqtouxiang.com%2fqinglv%2f2020-06-05%2f9737315e4f6a72e89a1e9ea4223fd34a.jpg&ehk=%2fuNqDi0KYfHWCuZ2yhjcH%2b8VVrehNZFnWAvekVZvhUw%3d&risl=&pid=ImgRaw&r=0",
-          id: "12345",
-          time: "20/1/02",
-        },
-        {
-          name: "备胎一号",
-          avatar:
-            "https://img2.woyaogexing.com/2020/10/09/222a2de17e87421285c352b050f2c47d!400x400.jpeg",
-          id: "12345",
-          time: "20/1/02",
-        },
-        {
-          name: "备胎二号",
-          avatar:
-            "https://tse4-mm.cn.bing.net/th/id/OIP-C.TQcBnO20xnfq0rGqNdZdJQAAAA?pid=ImgDet&rs=1",
           id: "12345",
           time: "20/1/02",
         },
@@ -141,6 +127,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::-webkit-scrollbar {
+  width: 0px;
+}
 .sum {
   height: 50px;
   text-align: center;
@@ -185,6 +174,7 @@ export default {
   width: 280px;
   height: 700px;
   background-color: #f7f7f7;
+  border-right: #888888 2px solid;
 
   .userlist-input {
     width: 200px;
@@ -223,6 +213,7 @@ export default {
         width: 45px;
         height: 45px;
         display: block;
+        border-radius: 100%;
       }
 
       .name-box {

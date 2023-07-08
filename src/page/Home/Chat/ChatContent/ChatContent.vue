@@ -153,7 +153,7 @@ export default {
 .chat-box {
   box-sizing: border-box;
   position: relative;
-  width: 660px;
+  width: 800px;
   height: 700px;
   border-left: 2px solid #aaaaaa;
 }

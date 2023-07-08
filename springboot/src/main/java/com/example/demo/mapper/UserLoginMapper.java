@@ -15,5 +15,5 @@ public interface UserLoginMapper {
     public Boolean isLoginById(int id);
     public List<User> queryAllById(int id);
     public int login(User user);
-    public int addUser(String email,String password);
+    public int addUser(User user);
 }
