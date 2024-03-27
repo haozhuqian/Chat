@@ -1,12 +1,12 @@
 export default {
   state: {
-    chatUser: {
+    You: {
       
     },
   },
   mutations: {
-    changeUser(state, val) {
-      state.chatUser = val;
+    setYou(state, val) {
+      state.You = val;
     },
   },
   actions: {},

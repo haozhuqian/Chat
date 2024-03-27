@@ -1,16 +1,20 @@
 <template>
   <div class="userlist-info-box">
+    <div class="avatars" v-if="upAvatar">
+      <img :src="'/img/avatar/'+avatar+'.png'" v-for="avatar in 14" @click="thisAvatar(avatar)" class="avatar"/>
+    </div>
     <div class="userlist-info-top">
       <div>
         <input type="text" v-model="userMessage.name" class="isInput" />
       </div>
-      <img :src="userMessage.avatar" alt="" />
-      <input
+      <img :src="userMessage.avatar" alt="" @click="updateAvatar" />
+      <!-- <input
         type="file"
         class="isInput"
         id="uploadFile"
         @change="updateAvatar"
-      />
+      /> -->
+      
     </div>
     <div class="userlist-info-main">
       <div class="message-item">
@@ -46,22 +50,30 @@ export default {
     [...document.getElementsByClassName("isInput")].forEach((e) => {
       e.setAttribute("disabled", "disabled");
     });
-    this.userMessage = this.$store.state.user.userMessage;
+    this.userMessage = this.$store.state.user.Me;
+    console.log();
   },
   methods: {
     updateAvatar() {
-      let formData = new FormData();
-      formData.append("file", document.getElementById("uploadFile").files[0]);
-      let config = {
-        headers: { "Content-Type": "multipart/form-data" },
-      }; //添加请求头
-      axios
-        .post("http://localhost:8080/upload", formData, config)
-        .then((res) => {
-          console.log(res);
-          this.userMessage.avatar = res;
-          console.log(this.userMessage);
-        });
+      if (!this.isRevise) {
+        this.upAvatar = true;
+      }
+      // let formData = new FormData();
+      // formData.append("file", document.getElementById("uploadFile").files[0]);
+      // let config = {
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // }; //添加请求头
+      // axios
+      //   .post("http://localhost:8080/upload", formData, config)
+      //   .then((res) => {
+      //     console.log(res);
+      //     this.userMessage.avatar = res;
+      //     console.log(this.userMessage);
+      //   });
+    },
+    thisAvatar(avatar) {
+      this.userMessage.avatar = '/img/avatar/'+avatar+'.png';
+      this.upAvatar = false;
     },
     isDisable() {
       this.isRevise = !this.isRevise;
@@ -93,15 +105,16 @@ export default {
   },
   data() {
     return {
+      upAvatar: false,
       isRevise: true,
       userMessage: {
-        name: "渣男本茶",
+        name: "错误 获取不到消息",
         avatar:
           "https://tse1-mm.cn.bing.net/th/id/R-C.d1c70e819588207bed6fba871c2d47dd?rik=6P9u%2b7JBZVikQQ&riu=http%3a%2f%2ffile.qqtouxiang.com%2fnansheng%2f2019-12-24%2f156cd442c68a0e20030c0fe72efe7dc9.jpeg&ehk=75MR%2fJ%2bxSvpra0%2btzVMowB%2b4h5cXfcv5U0K2e3xFYfY%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1",
         gender: "男",
-        region: "山西临汾",
-        email: "3094969938@qq.com",
-        userId: 0,
+        region: "山西",
+        email: "2932978634@qq.com",
+        id: 0,
       },
     };
   },
@@ -117,10 +130,30 @@ export default {
   display: block;
   opacity: 0;
 }
+.avatars {
+      position: absolute;
+      z-index: 1000;
+      width: 600px;
+      height: 400px;
+      top:calc(50% - 250px) ;
+      left: calc(50% - 300px) ;
+      border-radius: 10px;
+      background-color: rgba(0,0,0,0.6);
+      display: flex;
+      flex-wrap: wrap;
+      
+    .avatar {
+      border-radius: 100%;
+      width: 100px;
+      height: 100px;
+      margin: 10px;;
+    }
+    }
 .userlist-info-box {
   position: relative;
   width: 900px;
   height: 700px;
+
   .userlist-info-top {
     width: 400px;
     position: absolute;
@@ -129,19 +162,26 @@ export default {
     top: 100px;
     display: flex;
     justify-content: space-between;
+
     input {
       font-size: 20px;
     }
+
     div {
       word-wrap: break-word;
       font-size: 20px;
       width: 300px;
     }
+
+   
+
     img {
       width: 70px;
       height: 70px;
+      border-radius: 100%;
     }
   }
+
   .userlist-info-main {
     width: 400px;
     height: 200px;
@@ -151,25 +191,30 @@ export default {
     top: 220px;
     border-top: 2px solid #c2c1c1;
     border-bottom: 2px solid #c2c1c1;
+
     .message-item {
       display: flex;
       width: 300px;
       margin-top: 30px;
       font-size: 18px;
       justify-content: space-between;
+
       input {
         color: black !important;
         font-size: 18px;
       }
     }
+
     .message-item :nth-child(1) {
       color: #c2c1c1;
     }
+
     .message-item :nth-child(2) {
       width: 200px;
     }
   }
 }
+
 .send-message {
   position: absolute;
   transform: translate(-50%);
@@ -181,5 +226,4 @@ export default {
   color: white;
   text-align: center;
   line-height: 40px;
-}
-</style>
+}</style>

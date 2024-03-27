@@ -13,7 +13,7 @@ import "element-plus/dist/index.css";
 // axios封装
 import api from "./api/api";
 // iconfont组件封装
-import "./assets/icon/iconfoot";
+import icon from "./assets/icon/iconfoot";
 import component from "./components/components";
 // 引入字体
 import "./assets/font/font.css";
@@ -27,5 +27,5 @@ app
   .use(echarts)
   .use(component)
   .use(ElementPlus)
-  // .use(icon)
+  .use(icon)
   .mount("#app");

@@ -5,24 +5,17 @@
     </div>
     <div v-if="showChatBox">
       <div class="chat-top-box">
-        <div class="chat-name-box">{{ $store.state.chat.chatUser.name }}</div>
+        <div class="chat-name-box">{{ $store.state.chat.You.name }}</div>
       </div>
       <div>
-        <div>
-          <div class="get-chat-history" @click="getChatHistory">获取历史聊天记录</div>
-        </div>
+
         <div class="chat-main-box">
-          <chat-item :msg="item" v-for="item in messageList" ></chat-item>
+          <chat-item :msg="item" v-for="item in messageList"></chat-item>
+          <div class="chat-history" @click="getChatHistory">点击获取历史聊天记录</div>
         </div>
       </div>
       <div class="chat-input-box">
-        <textarea
-          name=""
-          id="chat-input"
-          cols="30"
-          rows="2"
-          ref="chatInput"
-        ></textarea>
+        <textarea name="" id="chat-input" cols="30" rows="2" ref="chatInput"></textarea>
         <div class="send-btn" @click="sendMessage">发送(S)</div>
       </div>
     </div>
@@ -32,36 +25,19 @@
 <script>
 import ChatItem from "./ChatItem.vue";
 export default {
-  created(){
-    /* let userInfo = this.$store.state.user.userMessage;
-      console.log(userInfo);
-      let obj = {
-        sendUserName: userInfo.name,
-        sendUserAvatar: userInfo.avatar,
-        receiveUserId: this.$store.state.chat.chatUser.userId,
-        sendUserId: userInfo.userId,
-        sendContent: this.$refs.chatInput.value,
-      };
-      this.messageList.push(obj); */
-
-  },
   mounted() {
-    console.log("chatContent is mounted");
-    console.log('测试一下这个',this.$store.state.user.userMessage);
     this.conectWebSocket();
   },
   unmounted() {
-    console.log(this.$store.state.user.userMessage.chatUser.userId != undefined);
     this.conectWebSocket();
-    
+
   },
   computed: {
     showChatBox() {
-      return this.$store.state.chat.chatUser.userId != undefined;
-      // return this.$store.state.hello.userChatting;
+      return this.$store.state.chat.You.id != undefined;
     },
     getChatState() {
-      return this.$store.state.chat.chatUser.userId;
+      return this.$store.state.chat.You.id;
     },
   },
   components: {
@@ -74,12 +50,8 @@ export default {
   },
   methods: {
     conectWebSocket() {
-      let nickname = this.$store.state.user.userMessage.name;
+      let nickname = this.$store.state.user.Me.name;
       let that = this;
-      if (nickname === "") {
-        alert("请输入昵称");
-        return;
-      }
       //判断当前浏览器是否支持WebSocket
       if ("WebSocket" in window) {
         this.websocket = new WebSocket(
@@ -98,11 +70,13 @@ export default {
       };
       //接收到消息的回调方法
       this.websocket.onmessage = function (event) {
-        console.log('接收到消息的回调方法',event);
+        console.log('接收到消息的回调方法', event);
         let message = JSON.parse(event.data);
-        if (message.receiveUserId == that.$store.state.user.userMessage.userId) {
-          that.messageList.push(message);
-          console.log("我是that.messageList啦啦啦啦啦",that.messageList);
+        console.log(message);
+        console.log(that.$store.state.user.Me.id);
+        if (message.receiveId == that.$store.state.user.Me.id && message.sendId == that.$store.state.chat.You.id) {
+          that.messageList.unshift(message);
+          console.log("我是that.messageList啦啦啦啦啦", that.messageList);
         }
       };
       //连接关闭的回调方法
@@ -115,40 +89,40 @@ export default {
       };
     },
     sendMessage() {
-      let userInfo = this.$store.state.user.userMessage;
-      console.log(userInfo);
+      let userInfo = this.$store.state.user.Me;
+      if(/^\s*$/.test(this.$refs.chatInput.value)){
+        this.$message.error("不能发送空消息");
+        return;
+      }
       let obj = {
-        sendUserName: userInfo.name,
-        sendUserAvatar: userInfo.avatar,
-        receiveUserId: this.$store.state.chat.chatUser.userId,
-        sendUserId: userInfo.userId,
-        sendContent: this.$refs.chatInput.value,
+        receiveId: this.$store.state.chat.You.id,
+        sendId: userInfo.id,
+        message: this.$refs.chatInput.value,
       };
       this.websocket.send(JSON.stringify(obj));
-      this.messageList.push(obj);
+      console.log(this.messageList);
+      console.log("sendMessage");
+      this.messageList.unshift(obj);
       console.log(this.messageList);
       this.$refs.chatInput.value = "";
     },
-    getChatHistory(){
-      let sendUserId = this.$store.state.user.userMessage.userId;
-      let receiveUserId = this.$store.state.chat.chatUser.userId;
-      this.$api.chatApi.getChatHistory(sendUserId,receiveUserId).then((res) => {
-      console.log(res);
-     res.forEach(i => {
-      let historyChatObj = {
-  receiveUserId: i.receiveUserId,
-  sendUserId: i.sendUserId,
-  sendUserAvatar: i.sendUserAvatar,
-  sendContent: i.sendContent,
-  sendUserName: i.sendUserName
-}
-console.log("historyChatObj",historyChatObj);
-      this.messageList.push(historyChatObj);
+    getChatHistory() {
+      let sendId = this.$store.state.user.Me.id;
+      let receiveId = this.$store.state.chat.You.id;
+      this.$api.chatApi.getChatHistory(sendId, receiveId).then((res) => {
+        console.log(res);
+        res.forEach(i => {
+          let historyChatObj = {
+            receiveId: i.receiveId,
+            sendId: i.sendId,
+            message: i.message,
+          }
+          this.messageList.unshift(historyChatObj);
+        });
+        console.log(this.messageList);
+      }).catch((err) => {
+        console.log(err);
       });
-      console.log(this.messageList);
-    }).catch((err) => {
-      console.log(err);
-    });
     }
   },
   data() {
@@ -156,12 +130,12 @@ console.log("historyChatObj",historyChatObj);
       websocket: null,
       messageList: [
         {
-         /*  sendUserName: "备胎一号",
-          sendUserAvatar:
-            "https://img2.woyaogexing.com/2020/10/09/222a2de17e87421285c352b050f2c47d!400x400.jpeg",
-          sendUserId: "123456",
-          toUserId:'6',
-          sendContent: "嘤嘤嘤", */
+          /*  sendUserName: "备胎一号",
+           sendUserAvatar:
+             "https://img2.woyaogexing.com/2020/10/09/222a2de17e87421285c352b050f2c47d!400x400.jpeg",
+           sendUserId: "123456",
+           toUserId:'6',
+           sendContent: "嘤嘤嘤", */
         },
       ],
     };
@@ -175,40 +149,59 @@ console.log("historyChatObj",historyChatObj);
   left: 42%;
   top: 150px;
 }
+
 .chat-box {
+  box-sizing: border-box;
   position: relative;
-  width: 660px;
+  width: 800px;
   height: 700px;
+  border-left: 2px solid #aaaaaa;
 }
+
 .chat-top-box {
+  box-sizing: border-box;
   width: 100%;
   height: 70px;
   background-color: #f5f5f5;
-  border-bottom: 1px solid #e6e5e5;
-  border-left: 1px solid #e6e5e5;
+  border-bottom: 2px solid #bbbbbb;
 }
+
 .chat-name-box {
   width: 450px;
   height: 70px;
   line-height: 70px;
-  font-size: 22px;
-  margin-left: 40px;
+  font-size: 24px;
+  margin-left: 24px;
 }
+
 .chat-main-box {
   width: 100%;
   height: 468px;
   overflow-y: scroll;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+
+  display: flex;
+  flex-direction: column-reverse;
+
+  .chat-history {
+    height: 20px;
+    line-height: 20px;
+    font-size: 10px;
+    text-align: center;
+    background-color: transparent;
+    color: #666666;
+    font-size: 8px;
+  }
 }
+
 .chat-input-box {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  box-sizing: border-box;
   height: 160px;
-  border-top: 1px solid #e6e5e5;
+  border-top: 2px solid #bbbbbb;
+  padding: 20px 30px;
+
   #chat-input {
-    margin-top: 20px;
-    margin-left: 30px;
     width: 90%;
     font-size: 18px;
     height: 80px;
@@ -217,10 +210,11 @@ console.log("historyChatObj",historyChatObj);
     outline: none;
     resize: none;
   }
+
   .send-btn {
     position: absolute;
-    right: 40px;
-    margin: 10px;
+    right: 20px;
+    bottom: 10px;
     width: 100px;
     height: 35px;
     background-color: #e9e9e9;
@@ -229,14 +223,7 @@ console.log("historyChatObj",historyChatObj);
     color: #5fc160;
     border-radius: 5px;
   }
-  .get-chat-history{
-    width: 20px;
-    height: 8px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: red;
-    color: aquamarine;
-    font-size: 8px;
-  }
+
+ 
 }
 </style>

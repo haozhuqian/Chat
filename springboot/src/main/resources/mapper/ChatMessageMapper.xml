@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ChatMessageMapper">
+
+
+    <select id="getChatHistory" resultType="com.example.demo.pojo.Message" parameterType="com.example.demo.pojo.Relate">
+        SELECT id, sendId, receiveId, message, time
+        FROM message_db
+        WHERE (sendId = #{sendId} AND  receiveId = #{receiveId})
+        OR (sendId = #{receiveId} AND receiveId = #{sendId})
+        ORDER BY time ASC
+    </select>
+
+    <insert id="insertChatMessage" parameterType="com.example.demo.pojo.Message">
+        INSERT INTO message_db( sendId, receiveId, message, time) VALUES (#{sendId}, #{receiveId}, #{message}, #{time})
+    </insert>
+
+</mapper>

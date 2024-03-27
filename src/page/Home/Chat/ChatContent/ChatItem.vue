@@ -1,20 +1,14 @@
 <template>
-  <div class="outer-box">
+  <div class="outer-box" :class="{ self: isSelf }">
     <div class="chat-item-box" v-if="!isSelf">
-      <img :src="msg.sendUserAvatar" alt="" />
-      <div>
-        <div class="userName">{{ msg.sendUserName }}</div>
-        <div class="message-box">{{ msg.sendContent }}</div>
-      </div>
+      <img :src="$store.state.chat.You.avatar" alt=""/>
+      <div class="message-box">{{ msg.message }}</div>
     </div>
     <div class="chat-item-box-self" v-if="isSelf">
-      <img :src="msg.sendUserAvatar" alt="" />
       <div>
-        <div class="userName">{{ msg.sendUserName }}</div>
-        <div class="message-box">
-          <div class="inner-box">{{ msg.sendContent }}</div>
-        </div>
+        <div class="message-box">{{ msg.message }}</div>
       </div>
+      <img :src="$store.state.user.Me.avatar" alt="" />
     </div>
   </div>
 </template>
@@ -28,79 +22,81 @@ export default {
     },
   },
   computed: {
+    
     isSelf() {
-      return this.msg.sendUserId == this.$store.state.user.userMessage.userId;
+      console.log(this.msg.avatar);
+      return this.msg.sendId == this.$store.state.user.Me.id;
     },
 
   },
-  
+  methods:{
+    show(){
+      console.log(this.msg);
+    },
+  }
+
 };
 </script>
 
 <style lang="less" scoped>
+.self {
+  flex-direction: row-reverse;
+}
+
 .outer-box {
-  position: relative;
-  width: 600px;
+  display: flex;
+  width: 100%;
   height: auto;
-  margin: 15px auto;
+  margin: 5px auto;
+
   .chat-item-box,
   .chat-item-box-self {
     position: relative;
     display: flex;
+
     img {
       position: relative;
       top: 0;
       width: 40px;
       height: 40px;
       display: block;
+      border-radius: 100%;
     }
-    .userName {
-      position: relative;
-      width: 200px;
-      left: 10px;
-      top: 0px;
-      font-size: 14px;
-      color: #9b9a9a;
-      // color: red;
-    }
+
     .message-box {
+      font-size: 14px;
       position: relative;
-      top: 5px;
-      left: 10px;
       display: inline-block;
-      max-width: 300px;
+      max-width: 350px;
       border-radius: 5px;
-      background-color: white;
-      padding: 10px;
+      padding: 11px;
       word-wrap: break-word;
     }
   }
+
+  .chat-item-box {
+    img {
+      left: 10px;
+    }
+
+    .message-box {
+      left: 10px;
+
+      background-color: white;
+    }
+  }
+
   .chat-item-box-self {
     img {
-      position: absolute;
-      right: 0rem;
+      right: 10px;
     }
-    .userName {
-      left: 350px;
-      text-align: right;
-    }
+
     .message-box {
-      left: 240px;
-      width: 300px;
+      right: 10px;
       display: flex;
       flex-direction: row-reverse;
-      background-color: transparent;
-      word-wrap: break-word;
-      .inner-box {
-        position: relative;
-        top: -10px;
-        background-color: #95ec69;
-        word-break: break-all;
-        display: inline-block;
-        padding: 10px;
-        border-radius: 5px;
-      }
+      background-color: #95ec69;
+
     }
   }
-}
-</style>
+}</style>
